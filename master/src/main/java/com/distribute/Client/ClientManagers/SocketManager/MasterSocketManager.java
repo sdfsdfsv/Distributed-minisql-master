@@ -14,11 +14,11 @@ public class MasterSocketManager {
     private Socket socket = null;
     private BufferedReader input = null;
     private PrintWriter output = null;
-    private boolean isRunning = false;
     private Thread infoListener;
 
     private ClientManager clientManager;
 
+    public static String masterString;
     //服务器的ip和端口
     private String master = "192.168.241.206";
     private int PORT = 8888;
@@ -34,7 +34,6 @@ public class MasterSocketManager {
         socket = new Socket(master,PORT);
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(socket.getOutputStream(),true);
-        isRunning = true;
 
         this.listenToMaster();
     }
@@ -65,8 +64,11 @@ public class MasterSocketManager {
 
         if( line != null ) {
             System.out.println("从主节点收到的消息是" + line);
+            
+            masterString= line;
 
         }
+
     }
 
     public void listenToMaster() {
@@ -91,11 +93,7 @@ public class MasterSocketManager {
         @Override
         public void run() {
             System.out.println(">>>客户端的主服务器监听线程启动！");
-            while (isRunning) {
-                if (socket.isClosed() || socket.isInputShutdown() || socket.isOutputShutdown()) {
-                    isRunning = false;
-                    break;
-                }
+            while (true) {
 
                 try {
                     receiveFromMaster();
