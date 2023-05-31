@@ -1,0 +1,9 @@
+com\distribute\Region\FtpUtils.class
+com\distribute\test.class
+com\distribute\Master\MasterManager$1.class
+com\distribute\Master\MasterServer.class
+com\distribute\Region\RegionServer.class
+com\distribute\Master\SocketHandler.class
+com\distribute\Master\TableManager.class
+com\distribute\Region\DataBaseManager.class
+com\distribute\Master\MasterManager.class
