@@ -61,8 +61,6 @@ class Api:
             print(Exception(str(e)))
         except Exception:
             print(Exception("Failed to drop table " + tableName))
-            
-        return False
 
     @staticmethod
     def createIndex(index:Index):
@@ -104,7 +102,7 @@ class Api:
     def deleteRow(tableName, conditions:list[Condition]):
         condition = Api.findIndexCondition(tableName, conditions)
         # print(condition)
-        numberOfRecords = None
+        numberOfRecords = 0
         #it means that the primary key of the record meets the conditions
         
         if condition is not None:
@@ -138,7 +136,7 @@ class Api:
 
     @staticmethod
     def select(tableName:str, attriName:list[str], conditions:list[Condition])->list[TableRow]:
-        resultSet = None
+        resultSet = []
         condition = Api.findIndexCondition(tableName, conditions)
         # print(condition)
         if condition is not None:

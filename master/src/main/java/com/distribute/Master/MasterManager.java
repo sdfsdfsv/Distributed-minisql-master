@@ -18,9 +18,9 @@ public class MasterManager {
 	public static final String ZK_HOST = "localhost:2181";
 
 	// ZooKeeper会话超时时间
-	public static final Integer ZK_SESSION_TIMEOUT = 3000;
+	public static final Integer ZK_SESSION_TIMEOUT = 1000;
 	// ZooKeeper连接超时时间
-	public static final Integer ZK_CONNECTION_TIMEOUT = 3000;
+	public static final Integer ZK_CONNECTION_TIMEOUT = 1000;
 	// ZooKeeper集群内各个服务器注册的节点路径
 	public static final String ZNODE = "/db";
 	// ZooKeeper集群内各个服务器注册自身信息的节点名前缀
@@ -67,7 +67,7 @@ public class MasterManager {
 		System.out.println("Server started, listening on port 8888...");
 
 		// 创建一个线程池，最大线程数为 10
-		Executor executor = Executors.newScheduledThreadPool(10);
+		Executor executor = Executors.newScheduledThreadPool(1000);
 
 		while (true) {
 			// 等待客户端连接

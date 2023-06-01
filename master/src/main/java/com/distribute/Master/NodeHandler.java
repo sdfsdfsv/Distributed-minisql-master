@@ -65,14 +65,14 @@ public class NodeHandler implements PathChildrenCacheListener {
             System.out.println("Execute recovery strategy for this server: " + hostName+"...");
             TableManager.instance.recoverServer(hostUrl);
             SocketHandler socketThread = TableManager.instance.getHostSocket(hostUrl);
-            socketThread.sendToRegion("[4]recover");
+            socketThread.sendToRegion("<master>[4]recover");
         }
 
         else {
             // Newly discovered server, add new data
             System.out.println("Execute add strategy for this server: " + hostName+"...");
             SocketHandler socketThread = TableManager.instance.getHostSocket(hostUrl);
-            socketThread.sendToRegion("[5]discover");
+            socketThread.sendToRegion("<master>[5]discover");
         }
     }
 
@@ -109,11 +109,14 @@ public class NodeHandler implements PathChildrenCacheListener {
                 allTable.append("/");
                 allTable.append(s);
             }
+            i++;
         }
 
         TableManager.instance.exchangeTable(bestInet, hostUrl);
         SocketHandler bestSocket = TableManager.instance.getHostSocket(bestInet);
-        bestSocket.sendToRegion("[3]" + allTable);
+
+        System.out.println("bestInet to exchange table is : " + bestInet);
+        bestSocket.sendToRegion("<master>[3]" + allTable);
     }
 
     /**

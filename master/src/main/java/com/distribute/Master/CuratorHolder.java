@@ -21,7 +21,7 @@ public class CuratorHolder {
 	/**
 	 * 在注册监听器的时候，如果传入此参数，当事件触发时，逻辑由线程池处理
 	 */
-	private ExecutorService pool = Executors.newFixedThreadPool(10);
+	private ExecutorService pool = Executors.newFixedThreadPool(1000);
 
 	private String hostUrl = null;
 

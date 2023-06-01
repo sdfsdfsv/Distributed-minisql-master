@@ -102,6 +102,7 @@ public class RegionSocketManager {
                     e.printStackTrace();
                 }
             }
+            System.out.println("客户端断开连接");
         }
     }
 }
