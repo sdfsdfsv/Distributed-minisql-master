@@ -20,7 +20,9 @@ public class MasterHandler implements Runnable {
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         instance = this;
-        sendTableInfoToMaster("");
+
+        sendTableInfoToMaster(getTables());
+        System.out.println("Region服务器有数据表如下====== " + getTables()+"================================");
     }
 
     public void sendToMaster(String modified_info) {
@@ -98,6 +100,30 @@ public class MasterHandler implements Runnable {
 
     }
 
+    public String getTables(){
+    
+        StringBuffer tables= new StringBuffer();
+
+         // 获取当前目录的File对象
+         File dir = new File(".");
+         // 创建一个FilenameFilter对象，用来过滤文件名
+         FilenameFilter filter = new FilenameFilter() {
+             @Override
+             public boolean accept(File dir, String name) {
+                 return name.endsWith(".index.db");
+             }
+         };
+         // 调用listFiles()方法获取当前目录下所有符合条件的文件
+         File[] files = dir.listFiles(filter);
+         // 遍历文件数组，删除每个文件
+         for (File file : files) {
+            tables.append(file.getName().replace(".index.db", ""));
+            tables.append(" ");
+         }
+         return tables.toString();
+
+
+    }
     @Override
     public void run() {
         try {
@@ -113,5 +139,6 @@ public class MasterHandler implements Runnable {
             }
         } catch (InterruptedException | IOException e) {
         }
+        System.out.println("Socket connection closed");
     }
 }

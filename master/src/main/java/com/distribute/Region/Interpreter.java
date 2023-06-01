@@ -140,13 +140,7 @@ public class Interpreter {
 
         i++;
         while (i < tokens.length) {
-            String value = tokens[i++];
-            if (value.startsWith("(")) {
-                value = value.substring(1);
-            }
-            if (value.endsWith(")")) {
-                value = value.substring(0, value.length() - 1);
-            }
+            String value = tokens[i++].replaceAll("[^A-Za-z0-9_-]", "");
             values.add(value);
         }
 

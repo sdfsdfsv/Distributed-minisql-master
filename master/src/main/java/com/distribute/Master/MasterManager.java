@@ -6,6 +6,8 @@ import java.net.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import com.distribute.Region.RegionServer;
+
 /**
  * MasterManager类，用于管理DB Master Server
  */
@@ -71,11 +73,11 @@ public class MasterManager {
 			// 等待客户端连接
 			Socket socket = serverSocket.accept();
 			String ipAddress = socket.getInetAddress().getHostAddress();
-
+			if(ipAddress.equals("127.0.0.1")){
+				ipAddress= RegionServer.getHostAddress();
+			}
 			SocketHandler socketThread = new SocketHandler(socket);
 			TableManager.instance.addSocketThread(ipAddress, socketThread);
-
-			System.out.println("Client connected: " + socket.getInetAddress());
 
 			// 创建一个新线程来处理客户端请求
 			executor.execute(socketThread);

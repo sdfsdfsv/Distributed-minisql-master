@@ -42,6 +42,7 @@ public class RegionSocketManager {
     }
 
     public void connectRegionServer(String ip, int PORT) throws IOException {
+        System.out.println("请求与从节点 " + ip + ":" + PORT + "建立连接" );
         socket = new Socket(ip,PORT);
         input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         output = new PrintWriter(socket.getOutputStream(),true);

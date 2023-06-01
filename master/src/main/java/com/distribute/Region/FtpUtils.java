@@ -11,12 +11,14 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
+import com.distribute.Master.MasterManager;
+
 public class FtpUtils {
 
 
     public static FtpUtils instance;
     // 此处设置为FTP的IP地址
-    public String hostname = "192.168.241.206";
+    public String hostname = MasterManager.ZK_HOST.split(":")[0];
     public int port = 21;
     public String username = "user";
     public String password = "123456";

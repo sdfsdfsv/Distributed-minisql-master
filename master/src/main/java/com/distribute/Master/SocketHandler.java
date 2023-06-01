@@ -3,6 +3,8 @@ package com.distribute.Master;
 import java.io.*;
 import java.net.*;
 
+import com.distribute.Region.RegionServer;
+
 public class SocketHandler implements Runnable {
 
 	private Socket socket;
@@ -12,7 +14,11 @@ public class SocketHandler implements Runnable {
 
 		this.socket = socket;
 		this.tManager = TableManager.instance;
-		System.out.println("New socket:" + socket.getInetAddress() + ":" + socket.getPort());
+		String ipAddress = socket.getInetAddress().getHostAddress();
+		if(ipAddress.equals("127.0.0.1")){
+			ipAddress= RegionServer.getHostAddress();
+		}
+		System.out.println("New socket:" + ipAddress + ":" + socket.getPort());
 	}
 
 	@Override
@@ -39,8 +45,12 @@ public class SocketHandler implements Runnable {
 
 			// 关闭连接
 			socket.close();
-			
-			System.out.println("Socket disconnected: " + socket.getInetAddress());
+			String ipAddress = socket.getInetAddress().getHostAddress();
+			if(ipAddress.equals("127.0.0.1")){
+				ipAddress= RegionServer.getHostAddress();
+			}
+
+			System.out.println("Socket disconnected: " + ipAddress);
 		
 
 		} catch (InterruptedException | IOException e) {
@@ -84,10 +94,13 @@ public class SocketHandler implements Runnable {
 		String result = "";
 		String ipAddress = socket.getInetAddress().getHostAddress();
 
-		System.out.println("Processing region :"+ ipAddress);
+		if(ipAddress.equals("127.0.0.1")){
+			ipAddress= RegionServer.getHostAddress();
+		}
 
 		// TODO 新加入server 
 		if (cmd.startsWith("[1]") && !tManager.existServer(ipAddress)) {
+			System.out.println("Tablenames from region--"+cmd);
 			tManager.addServer(ipAddress);
 			String[] allTable = cmd.substring(3).split(" ");
 			for (String temp : allTable) {
@@ -96,6 +109,7 @@ public class SocketHandler implements Runnable {
 		}
 		// todo create delete table
 		if (cmd.startsWith("[2]")) {
+			System.out.println("Dealing table add/delete from region--"+cmd);
 			String[] line = cmd.substring(3).split(" ");
 			if (line[1].equals("delete")) {
 				tManager.deleteTable(line[0], ipAddress);

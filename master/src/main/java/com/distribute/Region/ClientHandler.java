@@ -32,7 +32,11 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Starting listening client" + socket.getInetAddress() + socket.getPort() + "...");
+        String ipAddress = socket.getInetAddress().getHostAddress();
+        if(ipAddress.equals("127.0.0.1")){
+            ipAddress= RegionServer.getHostAddress();
+        }
+        System.out.println("Starting listening client" + ipAddress + socket.getPort() + "...");
         String line;
         try {
             while (true) {
@@ -40,7 +44,7 @@ public class ClientHandler implements Runnable {
                 line = input.readLine();
                 if (line != null) {
 
-                    this.commandProcess(line, socket.getInetAddress().toString());
+                    this.commandProcess(line, ipAddress);
 
                 }
             }

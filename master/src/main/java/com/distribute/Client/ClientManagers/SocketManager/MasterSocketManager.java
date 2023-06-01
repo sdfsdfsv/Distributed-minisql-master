@@ -1,6 +1,7 @@
 package com.distribute.Client.ClientManagers.SocketManager;
 
 import com.distribute.Client.ClientManagers.ClientManager;
+import com.distribute.Master.MasterManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class MasterSocketManager {
 
     public static String masterString;
     //服务器的ip和端口
-    private String master = "192.168.241.206";
+    private String master = MasterManager.ZK_HOST.split(":")[0];
     private int PORT = 8888;
 
     //sql指令的哈希表
@@ -63,9 +64,11 @@ public class MasterSocketManager {
         //还未确定，暂用
 
         if( line != null ) {
-            System.out.println("从主节点收到的消息是" + line);
             
             masterString= line;
+
+            System.out.println("从主节点收到的消息是" + masterString);
+            
 
         }
 
