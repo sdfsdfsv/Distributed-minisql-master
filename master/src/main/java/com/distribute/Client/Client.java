@@ -33,7 +33,8 @@ public class Client {
 
                 // INSERT INTO students (id, name, category) VALUES (1, 'ljx', 'man')
 
-                // CREATE TABLE students (id INT, name CHAR(50), category CHAR(50), PRIMARY KEY id)
+                // CREATE TABLE students (id INT, name CHAR(50), category CHAR(50), PRIMARY KEY
+                // id)
 
                 // DROP TABLE students
                 String sql = bufferedReader.readLine();
@@ -55,14 +56,14 @@ public class Client {
                         break;
                 }
                 System.out.println("\n发给master处理中。。。\n");
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 if (MasterSocketManager.masterString.equals("null")) {
                     System.out.println("没有储存该表名的region服务器");
                 } else {
                     cli.regionSocketManager.connectRegionServer(MasterSocketManager.masterString, 8889);
                     cli.regionSocketManager.sendToRegion(sql);
                 }
-                
+
             }
         } catch (Exception e) {
         }

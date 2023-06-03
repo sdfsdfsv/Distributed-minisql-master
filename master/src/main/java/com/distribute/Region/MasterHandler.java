@@ -40,12 +40,17 @@ public class MasterHandler implements Runnable {
         // todo: 从节点数据转移
         if (request.startsWith("<master>[3]")) {
 
+            System.out.println(
+                    "\n\033[33m--Server handling disaster backup--Start downloading tables from backups...\033[0m\n");
+
             String info = request.substring("<master>[3]".length());
 
             if (request.length() == "<master>[3]".length())
                 return;
 
             String[] tables = info.split(":")[1].split("/");
+
+            System.out.println("Recovering tables from backup.. " + tables);
 
             // <master[3]>ip#name@name@...
             for (String table : tables) {
@@ -55,8 +60,8 @@ public class MasterHandler implements Runnable {
             }
 
             String ip = info.split("#")[0];
-            FtpUtils.instance.additionalDownloadFile("catalog", ip + "#table_catalog");
-            FtpUtils.instance.additionalDownloadFile("catalog", ip + "#index_catalog");
+            FtpUtils.instance.additionalDownloadFile("catalog", ip + "#table.db");
+            FtpUtils.instance.additionalDownloadFile("catalog", ip + "#index.db");
 
             DataBaseManager.Init();
             DataBaseManager.Store();
@@ -65,6 +70,8 @@ public class MasterHandler implements Runnable {
         }
 
         if (request.equals("<master>[4]recover")) {
+
+            System.out.println("\n\033[0m--Server Recover--Recovering from disaster...\033[0m\n");
 
             // 获取当前目录的File对象
             File dir = new File(".");

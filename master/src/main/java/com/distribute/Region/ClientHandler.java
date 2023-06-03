@@ -139,7 +139,12 @@ public class ClientHandler implements Runnable {
     }
 
     public void sendTCToFTP() throws IOException {
-        ftpUtils.uploadFile("table.db", InetAddress.getLocalHost().getHostAddress(), "catalog");
-        ftpUtils.uploadFile("index.db", InetAddress.getLocalHost().getHostAddress(), "catalog");
+        String ipAddress = InetAddress.getLocalHost().getHostAddress();
+        
+        if(ipAddress.equals("127.0.0.1")){
+            ipAddress= RegionServer.getHostAddress();
+        }
+        ftpUtils.uploadFile("table.db", ipAddress, "catalog");
+        ftpUtils.uploadFile("index.db", ipAddress, "catalog");
     }
 }

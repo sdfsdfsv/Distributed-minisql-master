@@ -15,8 +15,8 @@ public class SocketHandler implements Runnable {
 		this.socket = socket;
 		this.tManager = TableManager.instance;
 		String ipAddress = socket.getInetAddress().getHostAddress();
-		if(ipAddress.equals("127.0.0.1")){
-			ipAddress= RegionServer.getHostAddress();
+		if (ipAddress.equals("127.0.0.1")) {
+			ipAddress = RegionServer.getHostAddress();
 		}
 		System.out.println("New socket:" + ipAddress + ":" + socket.getPort());
 	}
@@ -46,12 +46,11 @@ public class SocketHandler implements Runnable {
 			// 关闭连接
 			socket.close();
 			String ipAddress = socket.getInetAddress().getHostAddress();
-			if(ipAddress.equals("127.0.0.1")){
-				ipAddress= RegionServer.getHostAddress();
+			if (ipAddress.equals("127.0.0.1")) {
+				ipAddress = RegionServer.getHostAddress();
 			}
 
 			System.out.println("Socket disconnected: " + ipAddress);
-		
 
 		} catch (InterruptedException | IOException e) {
 			e.printStackTrace();
@@ -62,45 +61,43 @@ public class SocketHandler implements Runnable {
 
 		String result = "";
 		if (request.startsWith("<client>")) {
-			System.out.println("Request from client received: " + request+ "------------------------");
+			System.out.println("Request from client received--- " + request + " ------------------------");
 			// 去掉前缀之后开始处理
 			result = processClientCommand(request.substring(8));
 		} else if (request.startsWith("<region>")) {
-			System.out.println("Request from region received: " + request+ "------------------------");
+			System.out.println("Request from region received--- " + request + " ------------------------");
 			result = processRegionCommand(request.substring(8));
 		}
 		return result;
 
 	}
 
-
 	public String processClientCommand(String cmd) {
 		String result = "";
 		String tablename = cmd.substring(3);
 
-		//todo 删除表
+		// todo 删除表
 		if (cmd.startsWith("[1]")) {
 			result = tManager.getInetAddress(tablename);
-		} 
-		//todo 创建表
+		}
+		// todo 创建表
 		if (cmd.startsWith("[2]")) {
 			result = tManager.getBestServer();
 		}
 		return result;
 	}
 
-
 	public String processRegionCommand(String cmd) {
 		String result = "";
 		String ipAddress = socket.getInetAddress().getHostAddress();
 
-		if(ipAddress.equals("127.0.0.1")){
-			ipAddress= RegionServer.getHostAddress();
+		if (ipAddress.equals("127.0.0.1")) {
+			ipAddress = RegionServer.getHostAddress();
 		}
 
-		// TODO 新加入server 
+		// TODO 新加入server
 		if (cmd.startsWith("[1]") && !tManager.existServer(ipAddress)) {
-			System.out.println("Tablenames from region--"+cmd);
+			System.out.println("New Server Added----Tablenames----" + cmd);
 			tManager.addServer(ipAddress);
 			String[] allTable = cmd.substring(3).split(" ");
 			for (String temp : allTable) {
@@ -109,7 +106,7 @@ public class SocketHandler implements Runnable {
 		}
 		// todo create delete table
 		if (cmd.startsWith("[2]")) {
-			System.out.println("Dealing table add/delete from region--"+cmd);
+			System.out.println("Dealing table add/delete from region----" + cmd);
 			String[] line = cmd.substring(3).split(" ");
 			if (line[1].equals("delete")) {
 				tManager.deleteTable(line[0], ipAddress);
@@ -118,7 +115,7 @@ public class SocketHandler implements Runnable {
 			}
 		}
 
-		// todo 
+		// todo
 		if (cmd.startsWith("[3]")) {
 			System.out.println("完成从节点的数据转移");
 		}
@@ -131,11 +128,9 @@ public class SocketHandler implements Runnable {
 		return result;
 	}
 
-	public void sendToRegion(String string)throws IOException {
+	public void sendToRegion(String string) throws IOException {
 		PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 		out.println(string);
 	}
-
-	
 
 }
